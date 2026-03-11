@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Control Center</title>
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body data-page="app">
+  <div class="bg-layer bg-layer--one"></div>
+  <div class="bg-layer bg-layer--two"></div>
+  <div class="bg-noise"></div>
+  <div class="bg-grid"></div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brandbox">
+        <div class="brandbox__logo"></div>
+        <div>
+          <div class="brandbox__title">Control Center</div>
+          <div class="brandbox__sub">Система управления заявками</div>
+        </div>
+      </div>
+
+      <div class="sidebar-panel">
+        <div class="sidebar-panel__label">Сессия</div>
+        <div class="session-card">
+          <div class="session-card__status"></div>
+          <div>
+            <div class="session-card__title">Статус доступа</div>
+            <div class="session-card__value" id="auth_status">Not authorized</div>
+          </div>
+        </div>
+      </div>
+
+      <nav class="navstack">
+        <button class="navbtn active" id="nav_tables" type="button">
+          <span class="navbtn__text">Таблицы</span>
+          <span class="navbtn__sub">Работа с данными</span>
+        </button>
+        <button class="navbtn" id="nav_stats" type="button">
+          <span class="navbtn__text">Статистика</span>
+          <span class="navbtn__sub">Сводка по заявкам</span>
+        </button>
+        <button class="navbtn" id="nav_logs" type="button">
+          <span class="navbtn__text">Журнал</span>
+          <span class="navbtn__sub">Логи системы</span>
+        </button>
+        <button class="navbtn" id="nav_history" type="button">
+          <span class="navbtn__text">История</span>
+          <span class="navbtn__sub">Будущий аудит</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-panel">
+        <div class="sidebar-panel__label">Сервис</div>
+        <div class="service-actions">
+          <button class="ghostbtn" id="btn_token_toggle" type="button">Токен</button>
+          <button class="ghostbtn" id="btn_login_page" type="button">Вход</button>
+          <button class="ghostbtn" id="btn_logout" type="button">Выход</button>
+          <button class="ghostbtn ghostbtn--danger" id="nav_exit" type="button">Закрыть сессию</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <section class="view active" id="view_tables">
+        <header class="hero">
+          <div>
+            <div class="hero__eyebrow">Рабочая область</div>
+            <h1 class="hero__title">Управление сущностями и карточками</h1>
+            <p class="hero__desc">Выбирайте сущности, ищите записи, открывайте детали и редактируйте данные в одном интерфейсе.</p>
+          </div>
+          <div class="hero__actions">
+            <button class="primarybtn" id="btn_open_create" type="button">Создать запись</button>
+          </div>
+        </header>
+
+        <section class="toolbar glass-card">
+          <div class="toolbar__main">
+            <div class="fieldwrap fieldwrap--entity">
+              <label class="fieldlabel" for="entity_select">Сущность</label>
+              <select id="entity_select" class="fieldctrl fieldctrl--select"></select>
+            </div>
+
+            <div class="fieldwrap fieldwrap--search">
+              <label class="fieldlabel" for="search_q">Поиск</label>
+              <input id="search_q" class="fieldctrl" placeholder="Введите значение для поиска" />
+            </div>
+          </div>
+
+          <div class="toolbar__actions">
+            <button class="ghostbtn" id="btn_reload" type="button">Обновить</button>
+            <button class="ghostbtn" id="btn_open_view" type="button">Открыть</button>
+            <button class="ghostbtn" id="btn_open_edit" type="button">Изменить</button>
+            <button class="ghostbtn ghostbtn--danger" id="btn_open_delete" type="button">Удалить</button>
+          </div>
+        </section>
+
+        <section class="metrics">
+          <article class="metric-card">
+            <div class="metric-card__label">Выбранный ID</div>
+            <div class="metric-card__value" id="selected_id">—</div>
+          </article>
+          <article class="metric-card">
+            <div class="metric-card__label">Найдено записей</div>
+            <div class="metric-card__value" id="search_count">—</div>
+          </article>
+          <article class="metric-card">
+            <div class="metric-card__label">Текущая страница</div>
+            <div class="metric-card__value" id="page_label">1 / 1</div>
+          </article>
+        </section>
+
+        <section class="pager-grid">
+          <article class="glass-card pager-card">
+            <div class="block-title">Навигация по страницам</div>
+            <div class="pager-inline">
+              <button class="ghostbtn" id="btn_page_prev" type="button">Назад</button>
+              <button class="ghostbtn" id="btn_page_next" type="button">Вперед</button>
+            </div>
+            <div class="pager-inline">
+              <input id="page_input" class="fieldctrl" placeholder="Номер страницы" />
+              <button class="ghostbtn" id="btn_page_go" type="button">Перейти</button>
+            </div>
+          </article>
+
+          <article class="glass-card pager-card">
+            <div class="block-title">Переход по ID и размер страницы</div>
+            <div class="pager-inline">
+              <input id="goto_id" class="fieldctrl" placeholder="ID записи" />
+              <button class="ghostbtn" id="btn_goto_id" type="button">Найти</button>
+            </div>
+            <div class="pager-inline">
+              <input id="page_size" class="fieldctrl" placeholder="Записей на странице" />
+              <button class="ghostbtn" id="btn_page_apply" type="button">Применить</button>
+            </div>
+          </article>
+        </section>
+
+        <section class="glass-card managerpanel" id="request_manager_panel" style="display:none;">
+          <div class="panel-head">
+            <div>
+              <div class="panel-head__eyebrow">Управление заявкой</div>
+              <div class="panel-head__title">Инструменты менеджера</div>
+            </div>
+            <div class="active-request">Заявка <span id="manager_current_request">—</span></div>
+          </div>
+
+          <div class="manager-grid">
+            <article class="manager-tile">
+              <div class="manager-tile__title">Назначение мастера</div>
+              <label class="fieldlabel" for="manager_master_id">ID мастера</label>
+              <input id="manager_master_id" class="fieldctrl" placeholder="Например 3" />
+              <button class="primarybtn" id="btn_assign_master" type="button">Назначить</button>
+            </article>
+
+            <article class="manager-tile">
+              <div class="manager-tile__title">Изменение статуса</div>
+              <label class="fieldlabel" for="manager_status">Статус</label>
+              <select id="manager_status" class="fieldctrl fieldctrl--select">
+                <option value="Новая">Новая</option>
+                <option value="В работе">В работе</option>
+                <option value="Ожидание запчастей">Ожидание запчастей</option>
+                <option value="Выполнено">Выполнено</option>
+                <option value="Отменена">Отменена</option>
+              </select>
+              <button class="primarybtn" id="btn_change_status" type="button">Сменить статус</button>
+            </article>
+
+            <article class="manager-tile manager-tile--wide">
+              <div class="manager-tile__title">Продление срока выполнения</div>
+              <div class="manager-deadline-grid">
+                <div>
+                  <label class="fieldlabel" for="manager_completion_date">Новая дата завершения</label>
+                  <input id="manager_completion_date" class="fieldctrl" type="date" />
+                </div>
+                <div>
+                  <label class="fieldlabel" for="manager_comment">Комментарий</label>
+                  <input id="manager_comment" class="fieldctrl" placeholder="Комментарий к продлению" />
+                </div>
+              </div>
+              <button class="primarybtn" id="btn_extend_deadline" type="button">Продлить срок</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="cards-shell">
+          <div class="cards_grid cardsgrid" id="cards_grid"></div>
+        </section>
+      </section>
+
+      <section class="view" id="view_stats">
+        <header class="hero hero--stats">
+          <div>
+            <div class="hero__eyebrow">Статистика</div>
+            <h2 class="hero__title hero__title--small">Сводные показатели по заявкам</h2>
+            <p class="hero__desc">Общая статистика по выполнению, статусам и типам климатической техники.</p>
+          </div>
+          <button class="primarybtn" id="btn_stats_reload" type="button">Обновить статистику</button>
+        </header>
+
+        <section class="stats-cards">
+          <article class="stat-card">
+            <div class="stat-card__label">Всего заявок</div>
+            <div class="stat-card__value" id="stat_total">0</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-card__label">Выполнено</div>
+            <div class="stat-card__value" id="stat_completed">0</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-card__label">Среднее время ремонта</div>
+            <div class="stat-card__value" id="stat_avg_days">0 дн.</div>
+          </article>
+        </section>
+
+        <section class="stats-grid-2">
+          <article class="glass-card stat-panel">
+            <div class="block-title">По статусам</div>
+            <div id="stats_by_status" class="statslist"></div>
+          </article>
+          <article class="glass-card stat-panel">
+            <div class="block-title">По типам техники</div>
+            <div id="stats_by_type" class="statslist"></div>
+          </article>
+        </section>
+
+        <section class="glass-card quality-panel">
+          <div class="block-title">Опрос качества</div>
+          <div class="quality-grid">
+            <div class="qrbox">
+              <img id="quality_qr_img" alt="QR" />
+            </div>
+            <div class="quality-side">
+              <div class="quality-side__label">Ссылка на форму</div>
+              <div class="quality-side__link" id="quality_form_link"></div>
+              <div class="quality-side__actions">
+                <button class="ghostbtn" id="btn_open_quality_form" type="button">Открыть форму</button>
+                <button class="ghostbtn" id="btn_copy_quality_link" type="button">Копировать ссылку</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view_logs">
+        <header class="hero hero--smallpad">
+          <div>
+            <div class="hero__eyebrow">Журнал</div>
+            <h2 class="hero__title hero__title--small">Логи запросов и действий</h2>
+          </div>
+          <button class="ghostbtn" id="btn_logs_clear" type="button">Очистить журнал</button>
+        </header>
+        <pre id="log" class="logbox"></pre>
+      </section>
+
+      <section class="view" id="view_history">
+        <header class="hero hero--smallpad">
+          <div>
+            <div class="hero__eyebrow">История</div>
+            <h2 class="hero__title hero__title--small">Раздел истории изменений</h2>
+            <p class="hero__desc">Здесь можно разместить аудит действий и историю изменения записей.</p>
+          </div>
+        </header>
+        <section class="glass-card history-card">
+          <div class="history-card__title">История пока не подключена</div>
+          <div class="history-card__text">Раздел готов под серверный аудит и отображение действий пользователей.</div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" id="token_modal" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-panel">
+      <div class="modal-header">
+        <div class="modal-title"><span class="badge" id="token_badge">JWT</span><span>Токен сессии</span></div>
+        <button class="iconbtn" data-close="1" type="button" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <pre id="token_box" class="logbox logbox--modal"></pre>
+      </div>
+      <div class="modal-footer">
+        <button class="ghostbtn" id="btn_token_copy" type="button">Копировать</button>
+        <button class="primarybtn" data-close="1" type="button">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="details_modal" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-panel modal-panel--wide">
+      <div class="modal-header">
+        <div class="modal-title"><span class="badge badge--ok" id="details_badge">DETAILS</span><span id="details_title">…</span></div>
+        <button class="iconbtn" data-close="1" type="button" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="details_body" class="detailsbody"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="ghostbtn" id="btn_details_copy" type="button">Копировать JSON</button>
+        <button class="primarybtn" data-close="1" type="button">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="form_modal" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-panel modal-panel--wide">
+      <div class="modal-header">
+        <div class="modal-title"><span class="badge" id="form_badge">FORM</span><span id="form_title">…</span></div>
+        <button class="iconbtn" data-close="1" type="button" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="form_fields" class="formgrid"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="ghostbtn" data-close="1" type="button">Отмена</button>
+        <button class="primarybtn" id="btn_form_submit" type="button">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="confirm_modal" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-panel">
+      <div class="modal-header">
+        <div class="modal-title"><span class="badge badge--warn" id="confirm_badge">CONFIRM</span><span id="confirm_title">Confirm</span></div>
+        <button class="iconbtn" data-close="1" type="button" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="confirm_body" class="msgbody">…</div>
+      </div>
+      <div class="modal-footer">
+        <button class="ghostbtn" data-close="1" type="button">Отмена</button>
+        <button class="dangerbtn" id="btn_confirm_yes" type="button">Да</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="msg_modal" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-panel">
+      <div class="modal-header">
+        <div class="modal-title"><span class="badge" id="msg_kind">INFO</span><span id="msg_title">Message</span></div>
+        <button class="iconbtn" data-close="1" type="button" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="msg_body" class="msgbody">…</div>
+        <details class="msgdetails">
+          <summary>Details</summary>
+          <pre id="msg_details" class="logbox logbox--modal"></pre>
+        </details>
+      </div>
+      <div class="modal-footer">
+        <button class="primarybtn" data-close="1" type="button">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

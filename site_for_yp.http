@@ -1,0 +1,6 @@
+@site_for_yp_HostAddress = http://localhost:5121
+
+GET {{site_for_yp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

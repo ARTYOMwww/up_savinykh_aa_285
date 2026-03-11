@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login</title>
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body data-page="login">
+  <div class="bg-layer bg-layer--one"></div>
+  <div class="bg-layer bg-layer--two"></div>
+  <div class="bg-noise"></div>
+  <div class="bg-grid"></div>
+
+  <main class="login-shell">
+    <section class="login-showcase">
+      <div class="brandbox brandbox--login">
+        <div class="brandbox__logo"></div>
+        <div>
+          <div class="brandbox__title">Control Center</div>
+          <div class="brandbox__sub">Система управления заявками</div>
+        </div>
+      </div>
+
+      <div class="showcase-copy">
+        <div class="hero__eyebrow">Авторизация</div>
+        <h1 class="hero__title">Вход в рабочее пространство</h1>
+        <p class="hero__desc">Используйте логин и пароль для доступа к данным, карточкам заявок, статистике и журналу действий.</p>
+      </div>
+
+      <div class="showcase-panel">
+        <div class="showcase-panel__row">
+          <span></span><strong>Безопасный вход</strong>
+        </div>
+        <div class="showcase-panel__row">
+          <span></span><strong>Работа с API</strong>
+        </div>
+        <div class="showcase-panel__row">
+          <span></span><strong>Доступ к заявкам</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="login-card">
+      <div class="login-card__head">
+        <div class="hero__eyebrow">Вход</div>
+        <h2 class="hero__title hero__title--small">Введите учетные данные</h2>
+      </div>
+
+      <div class="login-form">
+        <div class="field">
+          <label for="login_user">Login</label>
+          <input id="login_user" placeholder="admin" autocomplete="username" />
+          <div class="hint">Введите логин пользователя.</div>
+          <div class="errtxt" id="err_login"></div>
+        </div>
+
+        <div class="field">
+          <label for="login_pass">Password</label>
+          <input id="login_pass" type="password" placeholder="123" autocomplete="current-password" />
+          <div class="hint">Введите пароль.</div>
+          <div class="errtxt" id="err_pass"></div>
+        </div>
+
+        <div class="login-actions">
+          <button class="primarybtn" id="btn_do_login" type="button">Войти</button>
+          <button class="ghostbtn" id="btn_register" type="button">Регистрация</button>
+          <button class="ghostbtn" id="btn_go_app" type="button">Открыть приложение</button>
+        </div>
+
+        <div class="login-note">Нажмите Enter для быстрого входа.</div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="msg_modal" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-panel">
+      <div class="modal-header">
+        <div class="modal-title"><span class="badge" id="msg_kind">INFO</span><span id="msg_title">Message</span></div>
+        <button class="iconbtn" data-close="1" type="button" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="msg_body" class="msgbody">…</div>
+        <details class="msgdetails">
+          <summary>Details</summary>
+          <pre id="msg_details" class="logbox logbox--modal"></pre>
+        </details>
+      </div>
+      <div class="modal-footer">
+        <button class="primarybtn" data-close="1" type="button">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
